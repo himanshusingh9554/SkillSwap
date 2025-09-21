@@ -1,0 +1,45 @@
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.transaction-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.transaction-details {
+    flex-grow: 1;
+}
+.transaction-details h4 { margin: 0 0 5px 0; }
+.transaction-details p { margin: 0; color: #555; font-size: 0.9em; }
+
+.transaction-status {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    color: white;
+    text-transform: capitalize;
+}
+.status-pending { background-color: #ffc107; color: #333; }
+.status-accepted { background-color: #17a2b8; }
+.status-completed { background-color: #28a745; }
+.status-cancelled { background-color: #6c757d; }
+
+.transaction-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.btn-accept { background-color: #28a745; color: white; }
+.btn-complete { background-color: #007bff; color: white; }
+.btn-cancel { background-color: #dc3545; color: white; }

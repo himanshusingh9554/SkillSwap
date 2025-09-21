@@ -1,0 +1,421 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f9;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #007bff;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.navbar nav a,
+.navbar nav button {
+  margin-left: 1rem;
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.navbar nav button:hover,
+.navbar nav a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  padding: 2rem;
+}
+
+.welcome {
+  margin-bottom: 2rem;
+}
+
+.skills ul {
+  list-style: none;
+  padding: 0;
+}
+
+.skills li {
+  background: white;
+  margin: 0.5rem 0;
+  padding: 0.8rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.navbar h1 { margin: 0; }
+.navbar a, .navbar button {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.navbar a:hover, .navbar button:hover { text-decoration: underline; }
+
+/* User Info Section */
+.user-info {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.welcome-message { margin: 0; color: #007bff; }
+.credits-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Main Dashboard Layout */
+.dashboard-content {
+    display: flex;
+    gap: 20px;
+}
+.skills-container {
+    flex: 2; /* Takes twice the space of the form */
+}
+.publish-skill-container {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    align-self: flex-start; /* Aligns to the top */
+}
+
+/* Skills List Styling */
+#skillsList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.skill-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 5px solid #007bff;
+}
+.skill-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.skill-card-header h4 {
+    margin: 0;
+    color: #333;
+}
+.skill-card-actions button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+.btn-edit { background-color: #ffc107; color: #333; }
+.btn-delete { background-color: #dc3545; color: white; }
+.skill-card-body p { margin: 0 0 10px 0; }
+.skill-card-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Form Styling */
+.skill-form .form-group {
+    margin-bottom: 15px;
+}
+.skill-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.skill-form input, .skill-form textarea, .skill-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+.form-row .form-group {
+    flex: 1;
+}
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.btn-submit:hover { background-color: #218838; }
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+/* Add these styles to the bottom of your dashboard.css file */
+
+/* Explore Section Styling */
+.explore-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.search-form input[type="search"] {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-form button {
+    padding: 0 25px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+.search-results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+/* Style for individual result cards */
+.result-card {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #28a745;
+}
+
+.result-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.result-card-header h4 {
+    margin: 0;
+}
+
+.result-card-footer {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #555;
+    font-weight: bold;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+}
+/* Add this to the bottom of your dashboard.css */
+
+.result-card .btn-connect {
+    padding: 8px 15px;
+    border: none;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.result-card .btn-connect:hover {
+    background-color: #138496;
+}
+/* Add these styles to the bottom of your dashboard.css file */
+
+.dashboard-content {
+    align-items: flex-start; /* Aligns columns to the top */
+}
+
+.left-column {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* My Chats Section Styling */
+.chats-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#chatsList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chat-item a {
+    display: block;
+    padding: 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    transition: background-color 0.2s;
+}
+
+.chat-item a:hover {
+    background-color: #e9ecef;
+}
+/* Add these styles to your main CSS file, e.g., dashboard.css */
+
+.notification-bell {
+    position: relative;
+    font-size: 1.5em; /* Makes the bell icon bigger */
+}
+
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    font-weight: bold;
+    display: none; /* Hidden by default */
+}
+
+.notification-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute;
+    right: 60px;
+    top: 60px;
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1001;
+}
+
+.notification-item {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-item.unread {
+    background-color: #e9f5ff;
+    font-weight: bold;
+}

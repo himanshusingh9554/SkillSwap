@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - SkillSwap</title>
+    <link rel="stylesheet" href="./css/dashboard.css"> <link rel="stylesheet" href="./css/profile.css">   </head>
+<body>
+    <header class="navbar">
+        <h1><a href="dashboard.html" style="color:white; text-decoration:none;">SkillSwap</a></h1>
+        <nav>
+            <a href="dashboard.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <button id="logoutBtn">Logout</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div id="profile-card" class="profile-card">
+            <div class="profile-header">
+                <img id="user-avatar" src="placeholder.jpg" alt="User Avatar" class="avatar">
+                <div class="profile-info">
+                    <h2 id="user-fullName">Loading...</h2>
+                    <button id="start-chat-btn" class="btn-connect" style="display: none;">Start Chat</button>
+                </div>
+            </div>
+
+            <div class="profile-skills">
+                <h3>Skills Offered</h3>
+                <ul id="user-skills-list">
+                    <li>Loading skills...</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script src="./js/profile.js"></script>
+</body>
+</html>
