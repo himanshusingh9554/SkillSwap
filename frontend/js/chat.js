@@ -1,5 +1,5 @@
 const API_BASE = "https://skillswap-cih6.onrender.com/api/v1";
-const SOCKET_SERVER_URL = "http://localhost:3000";
+const SOCKET_SERVER_URL = "https://skillswap-cih6.onrender.com";
 
 const messageContainer = document.getElementById('message-container');
 const messageForm = document.getElementById('message-form');
