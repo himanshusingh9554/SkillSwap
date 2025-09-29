@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000/api/v1";
+const API_BASE = "https://skillswap-cih6.onrender.com/api/v1";
 
 const userAvatarEl = document.getElementById('user-avatar');
 const userFullNameEl = document.getElementById('user-fullName');
