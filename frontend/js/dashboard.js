@@ -41,7 +41,7 @@ async function fetchUser() {
         window.location.href = "index.html";
     }
 }
-const SOCKET_SERVER_URL = "http://localhost:3000";
+const SOCKET_SERVER_URL = "https://skillswap-cih6.onrender.com";
 let socket;
 function setupSocket() {
     socket = io(SOCKET_SERVER_URL, {
