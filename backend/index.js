@@ -29,7 +29,7 @@ export const io = new Server(httpServer, {
 });
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5500" ,
+    origin: process.env.CORS_ORIGIN || "https://skillswapping11.netlify.app/" ,
     methods: ["GET", "POST", "PUT", "PATCH","DELETE"],
     credentials: true
 }));
