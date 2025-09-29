@@ -64,3 +64,39 @@
     margin-bottom: 10px;
     border-left: 4px solid #17a2b8;
 }
+/* Add these styles to your profile.css file */
+
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 4px solid #17a2b8;
+}
+
+.skill-item-info {
+    flex-grow: 1;
+}
+
+.skill-item-info strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.btn-request {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    margin-left: 15px; /* Adds space between skill info and button */
+}
+
+.btn-request:hover {
+    background-color: #218838;
+}

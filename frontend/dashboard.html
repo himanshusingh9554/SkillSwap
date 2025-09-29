@@ -20,96 +20,82 @@
             <button id="logoutBtn">Logout</button>
         </nav>
     </header>
+<div id="notification-dropdown" class="notification-dropdown"></div>
+  <main class="container">
+    <section class="user-info">
+        <h2 class="welcome-message">Welcome, <span id="userName">User</span> 👋</h2>
+        <div class="credits-display">
+            Your Credits: <span id="userCredits">0</span> 🪙
+        </div>
+    </section>
 
-    <main class="container">
-        <section class="user-info">
-            <h2 class="welcome-message">Welcome, <span id="userName">User</span> 👋</h2>
-            <div class="credits-display">
-                Your Credits: <span id="userCredits">0</span> 🪙
+    <section class="explore-section">
+        <h2>Explore Skills</h2>
+        <form id="searchForm" class="search-form">
+            <input type="search" id="searchInput" placeholder="Search for skills by title (e.g., 'Python', 'Guitar')...">
+            <button type="submit">Search</button>
+        </form>
+        <div id="searchResults" class="search-results-container">
             </div>
-        </section>
-          <section class="explore-section">
-            <h2>Explore Skills</h2>
-            <form id="searchForm" class="search-form">
-                <input type="search" id="searchInput" placeholder="Search for skills by title (e.g., 'Python', 'Guitar')...">
-                <button type="submit">Search</button>
-            </form>
-            <div id="searchResults" class="search-results-container">
-                </div>
-        </section>
+    </section>
 
-        <hr class="section-divider">
-        <div class="dashboard-content">
+    <hr class="section-divider">
+
+    <div class="dashboard-content">
+        <div class="left-column">
             <div class="skills-container">
                 <h3>Your Skills</h3>
                 <ul id="skillsList">
-                    <li>Loading your skills...</li>
-                </ul>
+                    </ul>
             </div>
-            <div class="dashboard-content">
-    
-    <div class="left-column">
-        <div class="skills-container">
-            <h3>Your Skills</h3>
-            <ul id="skillsList">
-                </ul>
+            <div class="chats-container">
+                <h3>My Chats</h3>
+                <ul id="chatsList">
+                    </ul>
+            </div>
         </div>
 
-        <div class="chats-container">
-            <h3>My Chats</h3>
-            <ul id="chatsList">
-                </ul>
-        </div>
-    </div>
-
-    <div class="publish-skill-container">
-        <h3>Publish New Skill</h3>
-        <form id="publishSkillForm" class="skill-form">
+        <div class="publish-skill-container">
+            <h3>Publish New Skill</h3>
+            <form id="publishSkillForm" class="skill-form">
+                <div class="form-group">
+                    <label for="skillTitle">Skill Title</label>
+                    <input type="text" id="skillTitle" placeholder="e.g., Learn Guitar" required />
+                </div>
+                <div class="form-group">
+                    <label for="skillDescription">Description</label>
+                    <textarea id="skillDescription" placeholder="Describe what you can teach or want to learn" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="skillCategory">Category</label>
+                        <select id="skillCategory" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Creative">Creative</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Business">Business</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillType">Skill Type</label>
+                        <select id="skillType" required>
+                            <option value="" disabled selected>Select Type</option>
+                            <option value="Offer">Offer Skill</option>
+                            <option value="Request">Request Skill</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="skillCredits">Credits</label>
+                    <input type="number" id="skillCredits" placeholder="e.g., 10" required min="0" />
+                </div>
+                <button type="submit" class="btn-submit">Publish Skill</button>
             </form>
-    </div>
-</div>
-
-            <div class="publish-skill-container">
-                <h3>Publish New Skill</h3>
-                <form id="publishSkillForm" class="skill-form">
-                    <div class="form-group">
-                        <label for="skillTitle">Skill Title</label>
-                        <input type="text" id="skillTitle" placeholder="e.g., Learn Guitar" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="skillDescription">Description</label>
-                        <textarea id="skillDescription" placeholder="Describe what you can teach or want to learn" required></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="skillCategory">Category</label>
-                            <select id="skillCategory" required>
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Creative">Creative</option>
-                                <option value="Lifestyle">Lifestyle</option>
-                                <option value="Business">Business</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="skillType">Skill Type</label>
-                            <select id="skillType" required>
-                                <option value="" disabled selected>Select Type</option>
-                                <option value="Offer">Offer Skill</option>
-                                <option value="Request">Request Skill</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="skillCredits">Credits</label>
-                        <input type="number" id="skillCredits" placeholder="e.g., 10" required min="0" />
-                    </div>
-                    <button type="submit" class="btn-submit">Publish Skill</button>
-                </form>
-            </div>
         </div>
-    </main>
+    </div>
+</main>
 
     <div id="editSkillModal" class="modal">
         <div class="modal-content">
@@ -143,7 +129,7 @@
             </form>
         </div>
     </div>
-
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="./js/dashboard.js"></script>
 </body>
 </html>

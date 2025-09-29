@@ -1,5 +1,5 @@
 import { Notification } from "../models/notification.model.js";
-
+import { io } from "../index.js"; 
 export const createNotification = async (userId, type, content, relatedId, typeRef) => {
   try {
     const notification = await Notification.create({
@@ -9,7 +9,7 @@ export const createNotification = async (userId, type, content, relatedId, typeR
       relatedId,
       typeRef
     });
-
+ io.to(userId.toString()).emit('new_notification', notification);
     return notification;
   } catch (error) {
     console.error("Error creating notification:", error);

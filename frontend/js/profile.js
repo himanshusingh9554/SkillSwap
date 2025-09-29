@@ -1,4 +1,5 @@
 const API_BASE = "http://localhost:3000/api/v1";
+
 const userAvatarEl = document.getElementById('user-avatar');
 const userFullNameEl = document.getElementById('user-fullName');
 const userSkillsListEl = document.getElementById('user-skills-list');
@@ -12,16 +13,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userId = params.get('userId');
 
     await fetchCurrentUser();
-    if (!currentUser) return; 
+    if (!currentUser) return;
 
     if (userId) {
-       
         fetchUserProfile(userId);
     } else {
-       
         fetchMyProfileData();
     }
 });
+
 
 async function fetchCurrentUser() {
     try {
@@ -41,8 +41,7 @@ async function fetchUserProfile(userId) {
         if (!res.ok) { userFullNameEl.textContent = "User not found."; return; }
         
         const responseData = await res.json();
-        displayUserProfile(responseData.data);
-
+        displayUserProfile(responseData.data, false); 
         if (currentUser && currentUser._id !== userId) {
             startChatBtn.style.display = 'block';
             startChatBtn.dataset.receiverId = userId;
@@ -54,35 +53,47 @@ async function fetchUserProfile(userId) {
 
 async function fetchMyProfileData() {
     try {
-        const res = await fetch(`${API_BASE}/skills/`); 
+        const res = await fetch(`${API_BASE}/skills/`);
         if (!res.ok) throw new Error("Could not fetch skills");
         
         const skillsData = await res.json();
-  
         const mySkills = skillsData.skills.filter(skill => skill.owner._id === currentUser._id);
         
         const profileData = {
             user: currentUser,
             skills: mySkills
         };
-        displayUserProfile(profileData);
+        displayUserProfile(profileData, true); 
     } catch(error) {
         console.error("Failed to fetch own profile data:", error);
     }
 }
 
-function displayUserProfile(data) {
+
+function displayUserProfile(data, isMyProfile) {
     const user = data.user;
     const skills = data.skills;
 
     userFullNameEl.textContent = user.fullName;
     userAvatarEl.src = user.profilePicture || `https://api.dicebear.com/8.x/initials/svg?seed=${user.fullName}`;
-
     userSkillsListEl.innerHTML = '';
+
     if (skills && skills.length > 0) {
         skills.forEach(skill => {
             const li = document.createElement('li');
-            li.innerHTML = `<strong>${skill.title}</strong> (${skill.credits} credits) <br> <small>${skill.description}</small>`;
+            li.className = 'skill-item';
+
+            
+            const requestButtonHtml = isMyProfile ? '' : `<button class="btn-request" data-skill-id="${skill._id}">Request Skill</button>`;
+
+            li.innerHTML = `
+                <div class="skill-item-info">
+                    <strong>${skill.title}</strong> (${skill.credits} credits)
+                    <br>
+                    <small>${skill.description}</small>
+                </div>
+                ${requestButtonHtml}
+            `;
             userSkillsListEl.appendChild(li);
         });
     } else {
@@ -90,15 +101,28 @@ function displayUserProfile(data) {
     }
 }
 
+
+
 startChatBtn.addEventListener('click', (e) => {
     const receiverId = e.target.dataset.receiverId;
     if (receiverId) initiateChat(receiverId);
+});
+
+userSkillsListEl.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-request')) {
+        const skillId = e.target.dataset.skillId;
+        if (skillId) {
+            handleInitiateTransaction(skillId);
+        }
+    }
 });
 
 logoutBtn.addEventListener("click", async () => {
     await fetch(`${API_BASE}/users/logout`, { method: "POST", credentials: "include" });
     window.location.href = "index.html";
 });
+
+
 
 async function initiateChat(receiverId) {
     try {
@@ -119,5 +143,33 @@ async function initiateChat(receiverId) {
         }
     } catch (error) {
         alert(`Failed to start a chat: ${error.message}`);
+    }
+}
+
+// NEW: Function to handle the transaction request
+async function handleInitiateTransaction(skillId) {
+    if (!confirm("Are you sure you want to request this skill?")) {
+        return;
+    }
+    try {
+        const res = await fetch(`${API_BASE}/transactions/initiate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ skillId })
+        });
+        const data = await res.json();
+        alert(data.message);
+        if (res.ok) {
+            fetchCurrentUser().then(() => {
+                const userCreditsEl = document.querySelector(".credits-display span");
+                if (userCreditsEl && currentUser) {
+                    userCreditsEl.textContent = currentUser.credits;
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error initiating transaction:', error);
+        alert('An error occurred. Please try again.');
     }
 }

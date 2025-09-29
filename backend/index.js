@@ -15,15 +15,13 @@ import messageRouter from './routes/message.routes.js';
 import { createNotification } from "./controllers/notification.controller.js";
 import notificationRouter from './routes/notification.routes.js';
 
-dotenv.config({
-    path: './.env'
-});
+dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
 const PORT = process.env.PORT || 3000;
 
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: process.env.CORS_ORIGIN ,
     credentials: true
@@ -45,7 +43,10 @@ app.use('/api/v1/notifications', notificationRouter);
 
 io.on("connection", (socket) => {
   console.log("✅ A user connected:", socket.id);
-
+  socket.on('setup', (userId) => {
+    socket.join(userId);
+    console.log(`User ${socket.id} is now associated with userId: ${userId}`);
+  });
   socket.on("join chat", (chatId) => {
     socket.join(chatId);
     console.log(`User ${socket.id} joined chat room: ${chatId}`);
@@ -79,7 +80,7 @@ io.on("connection", (socket) => {
 
       for (let participant of chat.participants) {
         if (participant._id.toString() !== senderId.toString()) {
-          await createNotification(
+         const notification= await createNotification(
             participant._id,
             "MESSAGE",
             `New message from ${fullMessage.sender.fullName}`,
