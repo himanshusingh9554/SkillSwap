@@ -1,5 +1,16 @@
-const API_BASE = "https://skillswap-cih6.onrender.com/api/v1";
-const SOCKET_SERVER_URL = "https://skillswap-cih6.onrender.com";
+const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BASE_HOST = IS_LOCAL ? 'http://localhost:3000' : 'https://skillswap-cih6.onrender.com';
+const API_BASE = `${BASE_HOST}/api/v1`;
+const SOCKET_SERVER_URL = BASE_HOST;
+
+function getAuthHeaders(extraHeaders = {}) {
+    const token = localStorage.getItem('accessToken');
+    const headers = { ...extraHeaders };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+}
 
 const messageContainer = document.getElementById('message-container');
 const messageForm = document.getElementById('message-form');
@@ -9,9 +20,14 @@ const otherUserProfileLink = document.getElementById('other-user-profile-link');
 let currentUser = null;
 let chatId = null;
 
-const socket = io(SOCKET_SERVER_URL, {
-    withCredentials: true
-});
+let socket = null;
+if (typeof io !== 'undefined') {
+    socket = io(SOCKET_SERVER_URL, {
+        withCredentials: true
+    });
+} else {
+    console.warn('Socket.io is not defined. Chat will not update in real-time.');
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -26,10 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await fetchChatDetails(chatId);
 
-    socket.emit('join chat', chatId);
+    socket?.emit('join chat', chatId);
     await fetchMessages(chatId);
 
-    socket.on('message received', (newMessage) => {
+    socket?.on('message received', (newMessage) => {
         if (currentUser && newMessage.sender._id !== currentUser._id) {
             appendMessage(newMessage);
         }
@@ -38,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchCurrentUser() {
     try {
-        const res = await fetch(`${API_BASE}/users/me`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders(), credentials: "include" });
         if (!res.ok) throw new Error('Not authenticated');
         const data = await res.json();
         currentUser = data.user;
@@ -50,7 +66,7 @@ async function fetchCurrentUser() {
 
 async function fetchChatDetails(cId) {
     try {
-        const res = await fetch(`${API_BASE}/chats/${cId}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/chats/${cId}`, { headers: getAuthHeaders(), credentials: "include" });
         const responseData = await res.json();
         if (!res.ok) throw new Error(responseData.message || "Could not fetch chat details.");
 
@@ -70,7 +86,7 @@ async function fetchChatDetails(cId) {
 
 async function fetchMessages(cId) {
     try {
-        const res = await fetch(`${API_BASE}/messages/${cId}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/messages/${cId}`, { headers: getAuthHeaders(), credentials: "include" });
         const responseData = await res.json();
         const messagesArray = responseData.data || responseData.messages || responseData;
         messageContainer.innerHTML = '';
@@ -98,7 +114,7 @@ messageForm.addEventListener('submit', (e) => {
     const content = messageInput.value.trim();
     if (content && currentUser && chatId) {
         const messageData = { chatId, senderId: currentUser._id, content };
-        socket.emit('new message', messageData);
+        socket?.emit('new message', messageData);
         const tempMessage = { sender: { _id: currentUser._id, fullName: 'You' }, content };
         appendMessage(tempMessage);
         messageInput.value = '';

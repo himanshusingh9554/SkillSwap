@@ -9,15 +9,16 @@ export const registerUser = async(req,res)=>{
     if(!fullName || !email || !password){
         return res.status(400).json({message:'All fields are required'})
     }
+    const normalizedEmail = email.trim().toLowerCase();
     try{
-        const existingUser = await User.findOne({email})
+        const existingUser = await User.findOne({email: normalizedEmail})
         if(existingUser){
-           return res.status(409).json({message:'User with this email already'})
+           return res.status(409).json({message:'User with this email already exists'})
         }
         const hashedPassword = await bcrypt.hash(password,10)
         const newUser=await User.create({
-            fullName,
-            email,
+            fullName: fullName.trim(),
+            email: normalizedEmail,
             password:hashedPassword,
         })
         const createdUser = await User.findById(newUser._id).select("-password")
@@ -26,8 +27,11 @@ export const registerUser = async(req,res)=>{
             user:createdUser
         })
     }catch(error){
-        console.log("Error in user registeration:",error)
-        res.status(500).json({message:'Smething went wrong'})
+        if (error.code === 11000) {
+            return res.status(409).json({ message: 'User with this email already exists' });
+        }
+        console.log("Error in user registration:",error)
+        return res.status(500).json({message:'Something went wrong'})
     }
 }
 
@@ -36,36 +40,38 @@ export const loginUser = async(req,res)=>{
     if(!email || !password){
         return res.status(400).json({message:'All fields are required'})
     }
+    const normalizedEmail = email.trim().toLowerCase();
     try{
-        const user = await User.findOne({email})
+        const user = await User.findOne({email: normalizedEmail})
         if(!user){
            return res.status(404).json({message:'User with this email not found'})
         }
         const isPassword = await bcrypt.compare(password,user.password)
             if(!isPassword){
-           return res.status(401).json({message:'password does not match'})
+           return res.status(401).json({message:'Password does not match'})
         }
         const accessToken = jwt.sign({
             id:user._id,
             email:user.email,
             fullName:user.fullName
-        },process.env.ACCESS_TOKEN_SECRET,
-    {
-        expiresIn:process.env.ACCESS_TOKEN_EXPIRY,
-    })
+        }, process.env.ACCESS_TOKEN_SECRET || 'your-super-secret-key',
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '1d',
+        })
         const loggingIn = await User.findById(user._id).select("-password")
+        const isProduction = process.env.NODE_ENV === 'production';
         const options={
             httpOnly:true,
-            secure:true,
-            sameSite: "None",
-    maxAge: 24 * 60 * 60 * 1000
+            secure: isProduction,
+            sameSite: isProduction ? "None" : "Lax",
+            maxAge: 24 * 60 * 60 * 1000
         }
         return res.status(200).cookie("accessToken",accessToken,options).json({
-            message:'Userlogin successfully',user:loggingIn,accessToken
+            message:'User logged in successfully',user:loggingIn,accessToken
         })
     }catch(error){
         console.log("Error in user login:",error)
-        return res.status(500).json({message:'Smething went wrong'})
+        return res.status(500).json({message:'Something went wrong'})
     }
 }
 export const getCurrentUser = async (req, res) => {
@@ -77,9 +83,14 @@ export const getCurrentUser = async (req, res) => {
     });
 };
 export const logoutUser = async (req, res) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   return res
     .status(200)
-    .clearCookie("accessToken", { httpOnly: true, secure: true })
+    .clearCookie("accessToken", {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax"
+    })
     .json({ message: "User logged out successfully" });
 };
 

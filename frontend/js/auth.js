@@ -1,4 +1,6 @@
-const API_BASE = "https://skillswap-cih6.onrender.com/api/v1/users";
+const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BASE_HOST = IS_LOCAL ? 'http://localhost:3000' : 'https://skillswap-cih6.onrender.com';
+const API_BASE = `${BASE_HOST}/api/v1/users`;
 
 function showSignup() {
   document.getElementById("loginForm").classList.add("hidden");
@@ -26,6 +28,9 @@ document.getElementById("login").addEventListener("submit", async (e) => {
 
     const data = await res.json();
     if (res.ok) {
+      if (data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+      }
       alert("Login successful!");
       window.location.href = "dashboard.html"; 
     } else {

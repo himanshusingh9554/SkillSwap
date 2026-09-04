@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
+
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { createServer } from "http";
@@ -15,22 +17,41 @@ import messageRouter from './routes/message.routes.js';
 import { createNotification } from "./controllers/notification.controller.js";
 import notificationRouter from './routes/notification.routes.js';
 
-dotenv.config();
-
 const app = express();
 const httpServer = createServer(app);
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+  "http://localhost:5500",
+  "http://127.0.0.1:5500",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://skillswapping11.netlify.app",
+  process.env.CORS_ORIGIN
+].filter(Boolean);
+
 export const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CORS_ORIGIN ,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+        return callback(null, origin || true);
+      }
+      return callback(null, origin || true);
+    },
     credentials: true
   }
 });
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || "https://skillswapping11.netlify.app" ,
-    methods: ["GET", "POST", "PUT", "PATCH","DELETE"],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+        return callback(null, origin);
+      }
+      return callback(null, origin);
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
     credentials: true
 }));
 

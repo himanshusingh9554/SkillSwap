@@ -1,4 +1,15 @@
-const API_BASE = "https://skillswap-cih6.onrender.com/api/v1";
+const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BASE_HOST = IS_LOCAL ? 'http://localhost:3000' : 'https://skillswap-cih6.onrender.com';
+const API_BASE = `${BASE_HOST}/api/v1`;
+
+function getAuthHeaders(extraHeaders = {}) {
+    const token = localStorage.getItem('accessToken');
+    const headers = { ...extraHeaders };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+}
 
 const userAvatarEl = document.getElementById('user-avatar');
 const userFullNameEl = document.getElementById('user-fullName');
@@ -25,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchCurrentUser() {
     try {
-        const res = await fetch(`${API_BASE}/users/me`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders(), credentials: "include" });
         if (!res.ok) { window.location.href = 'index.html'; return; }
         const data = await res.json();
         currentUser = data.user;
@@ -118,8 +129,14 @@ userSkillsListEl.addEventListener('click', (e) => {
 });
 
 logoutBtn.addEventListener("click", async () => {
-    await fetch(`${API_BASE}/users/logout`, { method: "POST", credentials: "include" });
-    window.location.href = "index.html";
+    try {
+        await fetch(`${API_BASE}/users/logout`, { method: "POST", headers: getAuthHeaders(), credentials: "include" });
+    } catch(e) {
+        console.error("Logout error", e);
+    } finally {
+        localStorage.removeItem("accessToken");
+        window.location.href = "index.html";
+    }
 });
 
 
@@ -128,7 +145,7 @@ async function initiateChat(receiverId) {
     try {
         const res = await fetch(`${API_BASE}/chats`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
             credentials: 'include',
             body: JSON.stringify({ receiverId })
         });
@@ -154,7 +171,7 @@ async function handleInitiateTransaction(skillId) {
     try {
         const res = await fetch(`${API_BASE}/transactions/initiate`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
             credentials: 'include',
             body: JSON.stringify({ skillId })
         });

@@ -1,6 +1,16 @@
-const API_BASE = "https://skillswap-cih6.onrender.com/api/v1";
+const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BASE_HOST = IS_LOCAL ? 'http://localhost:3000' : 'https://skillswap-cih6.onrender.com';
+const API_BASE = `${BASE_HOST}/api/v1`;
 let currentUser = null;
 
+function getAuthHeaders(extraHeaders = {}) {
+    const token = localStorage.getItem('accessToken');
+    const headers = { ...extraHeaders };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+}
 
 const userNameEl = document.getElementById("userName");
 const userCreditsEl = document.getElementById("userCredits");
@@ -21,29 +31,41 @@ const notificationDropdown = document.getElementById('notification-dropdown');
 
 async function fetchUser() {
     try {
-        const res = await fetch(`${API_BASE}/users/me`, { credentials: "include" });
-        if (!res.ok) { window.location.href = "index.html"; return; }
+        const res = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders(), credentials: "include" });
+        if (!res.ok) { 
+            const errText = await res.text();
+            alert(`API Error (${res.status}): ${errText}. Redirecting to login.`);
+            window.location.href = "index.html"; 
+            return; 
+        }
         const responseData = await res.json();
         currentUser = responseData.user;
         
         if (currentUser) {
             userNameEl.textContent = currentUser.fullName;
             userCreditsEl.textContent = currentUser.credits || 0;
-                   setupSocket(); 
+            setupSocket(); 
             fetchMySkills();
             fetchMyChats(); 
             fetchAndDisplayNotifications();
         } else {
+            alert("No user data found in response. Redirecting to login.");
             window.location.href = "index.html";
         }
     } catch (err) {
         console.error("User fetch error:", err);
+        alert(`Network/Fetch Error: ${err.message}\nAPI_BASE was: ${API_BASE}`);
         window.location.href = "index.html";
     }
 }
-const SOCKET_SERVER_URL = "https://skillswap-cih6.onrender.com";
+const SOCKET_SERVER_URL = BASE_HOST;
 let socket;
 function setupSocket() {
+    if (typeof io === 'undefined') {
+        console.warn('Socket.io is not defined. Real-time features disabled.');
+        return;
+    }
+    
     socket = io(SOCKET_SERVER_URL, {
         withCredentials: true
     });
@@ -65,7 +87,7 @@ function setupSocket() {
 
 async function fetchAndDisplayNotifications() {
     try {
-        const res = await fetch(`${API_BASE}/notifications`, { credentials: 'include' });
+        const res = await fetch(`${API_BASE}/notifications`, { headers: getAuthHeaders(), credentials: 'include' });
         const data = await res.json();
         if (data.success && data.notifications) {
             const notifications = data.notifications;
@@ -100,7 +122,7 @@ async function fetchAndDisplayNotifications() {
 async function fetchMySkills() {
     if (!currentUser) return;
     try {
-        const res = await fetch(`${API_BASE}/skills/`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/skills/`, { headers: getAuthHeaders(), credentials: "include" });
         const data = await res.json();
         skillsListEl.innerHTML = "";
         if (data.skills && Array.isArray(data.skills)) {
@@ -127,7 +149,7 @@ async function fetchMySkills() {
 
 async function fetchMyChats() {
     try {
-        const res = await fetch(`${API_BASE}/chats`, { credentials: 'include' });
+        const res = await fetch(`${API_BASE}/chats`, { headers: getAuthHeaders(), credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch chats');
         const responseData = await res.json();
         const chats = responseData.data || responseData.chats || responseData;
@@ -154,7 +176,7 @@ async function searchSkills(query) {
     searchResultsEl.innerHTML = '<p>Searching for skills...</p>';
     const url = `${API_BASE}/skills/my-skills?search=${encodeURIComponent(query)}`;
     try {
-        const res = await fetch(url, { credentials: 'include' });
+        const res = await fetch(url, { headers: getAuthHeaders(), credentials: 'include' });
         if (!res.ok) throw new Error('Search request failed');
         const data = await res.json();
         searchResultsEl.innerHTML = '';
@@ -184,7 +206,7 @@ async function searchSkills(query) {
 async function initiateChat(receiverId) {
     if (receiverId === currentUser._id) { alert("You cannot start a chat with yourself."); return; }
     try {
-        const res = await fetch(`${API_BASE}/chats`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ receiverId }) });
+        const res = await fetch(`${API_BASE}/chats`, { method: 'POST', headers: getAuthHeaders({ 'Content-Type': 'application/json' }), credentials: 'include', body: JSON.stringify({ receiverId }) });
         const responseData = await res.json();
         if (!res.ok) { throw new Error(responseData.message || 'Could not start chat.'); }
         const chatId = responseData.data?._id; 
@@ -199,7 +221,7 @@ async function initiateChat(receiverId) {
 async function handleInitiateTransaction(skillId) {
     if (!confirm("Are you sure you want to request this skill?")) { return; }
     try {
-        const res = await fetch(`${API_BASE}/transactions/initiate`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ skillId }) });
+        const res = await fetch(`${API_BASE}/transactions/initiate`, { method: 'POST', headers: getAuthHeaders({ 'Content-Type': 'application/json' }), credentials: 'include', body: JSON.stringify({ skillId }) });
         const data = await res.json();
         alert(data.message);
         if (res.ok) { fetchUser(); }
@@ -212,7 +234,7 @@ async function handleInitiateTransaction(skillId) {
 function handleDeleteSkill(skillId) {
     if (!confirm("Are you sure you want to delete this skill?")) { return; }
     try {
-        fetch(`${API_BASE}/skills/${skillId}`, { method: 'DELETE', credentials: 'include' })
+        fetch(`${API_BASE}/skills/${skillId}`, { method: 'DELETE', headers: getAuthHeaders(), credentials: 'include' })
         .then(res => {
             if (res.ok) {
                 alert("Skill deleted successfully!");
@@ -270,7 +292,7 @@ if (publishSkillForm) {
         submitButton.textContent = 'Publishing...';
         const skillData = { title: document.getElementById("skillTitle").value, description: document.getElementById("skillDescription").value, category: document.getElementById("skillCategory").value, skillType: document.getElementById("skillType").value, credits: Number(document.getElementById("skillCredits").value) };
         try {
-            const res = await fetch(`${API_BASE}/skills/create`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(skillData) });
+            const res = await fetch(`${API_BASE}/skills/create`, { method: "POST", headers: getAuthHeaders({ "Content-Type": "application/json" }), credentials: "include", body: JSON.stringify(skillData) });
             const data = await res.json();
             if (res.ok) {
                 alert("Skill published successfully!");
@@ -310,6 +332,7 @@ if (notificationDropdown) {
             try {
                 await fetch(`${API_BASE}/notifications/${notificationId}/read`, {
                     method: 'PUT',
+                    headers: getAuthHeaders(),
                     credentials: 'include'
                 });
             } catch (error) {
@@ -333,7 +356,7 @@ if (editSkillForm) {
         const skillId = document.getElementById('editSkillId').value;
         const updatedData = { title: document.getElementById('editSkillTitle').value, description: document.getElementById('editSkillDescription').value, category: document.getElementById('editSkillCategory').value, credits: Number(document.getElementById('editSkillCredits').value) };
         try {
-            const res = await fetch(`${API_BASE}/skills/${skillId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(updatedData) });
+            const res = await fetch(`${API_BASE}/skills/${skillId}`, { method: 'PATCH', headers: getAuthHeaders({ 'Content-Type': 'application/json' }), credentials: 'include', body: JSON.stringify(updatedData) });
             if (res.ok) {
                 alert("Skill updated successfully!");
                 editModal.style.display = 'none';
@@ -361,10 +384,12 @@ if (closeModalBtn) {
 if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
         try {
-            await fetch(`${API_BASE}/users/logout`, { method: "POST", credentials: "include" });
-            window.location.href = "index.html";
+            await fetch(`${API_BASE}/users/logout`, { method: "POST", headers: getAuthHeaders(), credentials: "include" });
         } catch (err) {
             console.error("Logout error:", err);
+        } finally {
+            localStorage.removeItem("accessToken");
+            window.location.href = "index.html";
         }
     });
 }
