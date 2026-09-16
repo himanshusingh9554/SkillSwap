@@ -1,0 +1,1 @@
+"""SkillSwap FastAPI Backend"""
