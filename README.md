@@ -88,30 +88,50 @@ skillswap/
 ```bash
 git clone https://github.com/your-username/skillswap.git
 cd skillswap
+```
 
-2. Setup Backend
+### 2. Setup Backend
+```bash
 cd backend
 npm install
+```
 
-
-Create a .env file in backend/:
-
+Create a `.env` file in `backend/`:
+```env
 PORT=3000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/skill_swap
 ACCESS_TOKEN_SECRET=your-super-secret-key
 ACCESS_TOKEN_EXPIRY=1d
-CORS_ORIGIN=http://localhost:5500
-
+CORS_ORIGIN=http://localhost:5173
+```
 
 Run backend:
-
+```bash
 npm start
+```
 
-3. Setup Frontend
+### 3. Setup Frontend
 
-Just open frontend/index.html with Live Server or host using Netlify.
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-Future Improvements
+For production builds:
+```bash
+npm run build
+```
 
-Push notifications
+Netlify automatically builds and deploys the frontend using the configuration in `netlify.toml`:
+- **Base directory:** `frontend`
+- **Build command:** `npm run build`
+- **Publish directory:** `dist`
+- **Redirects:** SPA routing `/*` to `/index.html` (200)
+
+---
+
+## 🔮 Future Improvements
+
+- Push notifications
 
