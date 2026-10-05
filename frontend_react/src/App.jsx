@@ -9,6 +9,7 @@ import DashboardPage from './pages/DashboardPage';
 import ChatPage from './pages/ChatPage';
 import TransactionsPage from './pages/TransactionsPage';
 import ProfilePage from './pages/ProfilePage';
+import AIResumeChatPage from './pages/AIResumeChatPage';
 import { Loader2 } from 'lucide-react';
 
 function ProtectedRoute({ children }) {
@@ -104,6 +105,22 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ai-assistant"
+              element={
+                <ProtectedRoute>
+                  <AIResumeChatPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ai-resume-chat"
+              element={
+                <ProtectedRoute>
+                  <AIResumeChatPage />
                 </ProtectedRoute>
               }
             />

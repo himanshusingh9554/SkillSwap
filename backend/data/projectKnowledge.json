@@ -1,0 +1,121 @@
+[
+  {
+    "id": "about-skillswap",
+    "category": "Platform Overview",
+    "title": "What is SkillSwap and how does it work?",
+    "content": "SkillSwap is a peer-to-peer community platform where people exchange knowledge, skills, and expertise without using real money. Users exchange skills using an internal credit-based system. One user can teach a skill they are proficient in (e.g., Python, Graphic Design, Guitar) to earn credits, and spend those credits to learn a skill from someone else (e.g., Public Speaking, React, Cooking).",
+    "keywords": ["about", "what is skillswap", "overview", "how it works", "introduction", "mission"]
+  },
+  {
+    "id": "credit-system-basics",
+    "category": "Credit System",
+    "title": "How do skill credits work and how many do I get at signup?",
+    "content": "Every newly registered user on SkillSwap receives a welcome bonus of 50 free credits. Credits serve as the currency of exchange on the platform. When you request a skill from another user, the agreed credit amount is held in escrow (pending). When the provider delivers the session and you mark the transaction as completed, the credits are transferred from your balance to the provider's balance.",
+    "keywords": ["credits", "starting credits", "signup bonus", "currency", "50 credits", "free credits", "balance"]
+  },
+  {
+    "id": "earning-spending-credits",
+    "category": "Credit System",
+    "title": "How can I earn and spend credits?",
+    "content": "You earn credits by publishing an 'Offer' skill listing and accepting skill requests from learners. Once you finish teaching the session and the learner marks it complete, credits are deposited into your account. You spend credits by browsing available skills, clicking 'Request Skill', and having the provider accept and teach you.",
+    "keywords": ["earn credits", "spend credits", "get more credits", "credit balance", "teaching credits"]
+  },
+  {
+    "id": "transaction-lifecycle",
+    "category": "Transactions",
+    "title": "What is the lifecycle of a skill swap transaction?",
+    "content": "A transaction goes through 3 defined stages: 1. 'Pending': Seeker finds a skill and submits a request. Credits are reserved. 2. 'Accepted': The provider reviews the request and accepts it. Both parties can now chat in real-time to schedule their session. 3. 'Completed': Once the learning session is held, the seeker marks it as completed, transferring credits to the provider. Either party can cancel while the request is pending or accepted.",
+    "keywords": ["transaction", "lifecycle", "status", "pending", "accepted", "completed", "cancelled", "flow"]
+  },
+  {
+    "id": "transaction-cancellation",
+    "category": "Transactions",
+    "title": "Can I cancel a transaction and what happens to my credits?",
+    "content": "Yes, either the seeker or provider can cancel a transaction as long as it is in 'Pending' or 'Accepted' status. When a transaction is cancelled, the reserved credits are immediately released and returned to the seeker's balance. Completed transactions cannot be cancelled because credits have already been transferred.",
+    "keywords": ["cancel transaction", "refund credits", "cancellation policy", "cancelled status"]
+  },
+  {
+    "id": "skill-types",
+    "category": "Skills",
+    "title": "What are the two types of skills on SkillSwap?",
+    "content": "There are two skill types: 1. 'Offer': A skill you possess and are offering to teach to others in exchange for credits. 2. 'Request': A skill or topic you are actively looking to learn from community members.",
+    "keywords": ["skill types", "offer", "request", "teaching", "learning", "publish skill"]
+  },
+  {
+    "id": "skill-categories",
+    "category": "Skills",
+    "title": "What categories of skills are available?",
+    "content": "SkillSwap supports five main categories: 1. Technology (Web development, programming, cloud, cybersecurity, AI/ML), 2. Creative (Graphic design, video editing, music, photography, writing), 3. Lifestyle (Fitness, cooking, languages, mindfulness), 4. Business (Marketing, finance, entrepreneurship, sales), 5. Other (Any unique or miscellaneous hobby/skill).",
+    "keywords": ["categories", "technology", "creative", "lifestyle", "business", "genres", "types"]
+  },
+  {
+    "id": "publish-skill",
+    "category": "Skills",
+    "title": "How do I publish or edit a skill listing?",
+    "content": "To publish a skill, log into your account, go to the Dashboard, and click 'Publish Skill'. Provide a descriptive title, category, type (Offer/Request), credit cost (typically 10-50 credits), and a clear description of what will be taught or learned. You can edit or delete your own skills at any time from your Profile or Dashboard.",
+    "keywords": ["publish skill", "create skill", "add listing", "edit skill", "delete skill", "manage skills"]
+  },
+  {
+    "id": "chat-system",
+    "category": "Messaging",
+    "title": "How does the real-time chat work on SkillSwap?",
+    "content": "SkillSwap features a built-in real-time chat powered by WebSockets (Socket.IO). When a skill transaction is initiated or accepted, or when you reach out to a user, a 1-on-1 chat room is created. You can send messages instantly, see timestamps, and discuss session timings, Google Meet/Zoom links, and learning roadmaps directly within the platform.",
+    "keywords": ["chat", "real-time messaging", "socket.io", "messages", "communication", "talk to provider"]
+  },
+  {
+    "id": "notifications",
+    "category": "Messaging",
+    "title": "How do notifications work?",
+    "content": "You receive real-time push notifications for new chat messages, new skill swap requests, transaction acceptances, and completion confirmations. Unread notifications are badged in the header and can be marked as read with a single click.",
+    "keywords": ["notifications", "alerts", "socket alerts", "unread notifications"]
+  },
+  {
+    "id": "authentication-security",
+    "category": "Account & Security",
+    "title": "How are accounts and passwords secured?",
+    "content": "SkillSwap secures user accounts with industry-standard JSON Web Tokens (JWT) stored in httpOnly secure cookies and authorization headers. Passwords are encrypted using bcrypt hashing with 10 salt rounds before being stored in MongoDB Atlas, ensuring credentials are never exposed in plain text.",
+    "keywords": ["security", "jwt", "passwords", "bcrypt", "cookies", "login security", "account protection"]
+  },
+  {
+    "id": "profile-customization",
+    "category": "Account & Security",
+    "title": "How do I update my profile details and avatar?",
+    "content": "Navigate to the 'Profile' page from the top navigation bar. You can view your current credit balance, active skill listings, and transaction history. You can edit your bio, full name, and upload a custom profile picture using the image upload tool.",
+    "keywords": ["profile", "avatar", "update bio", "change photo", "edit profile", "credit count"]
+  },
+  {
+    "id": "smart-matcher",
+    "category": "AI Features",
+    "title": "What is the AI Smart Matcher feature?",
+    "content": "The AI Smart Matcher scans all active skills in the database and analyzes user prompts (e.g. 'I want to build a React website' or 'Looking for someone to teach me guitar'). It uses semantic understanding to recommend the best matching community skills and suggests who to reach out to.",
+    "keywords": ["ai match", "smart matcher", "find tutor", "recommend skills", "matchmaker"]
+  },
+  {
+    "id": "skill-enhancer",
+    "category": "AI Features",
+    "title": "What is the AI Skill Enhancer feature?",
+    "content": "The AI Skill Enhancer takes a rough skill draft or bullet points from a user and transforms it into a professional, compelling listing with an engaging title, structured description, suggested learning outcomes, and recommended credit pricing.",
+    "keywords": ["ai enhance", "skill enhancer", "improve description", "polish listing"]
+  },
+  {
+    "id": "swap-roadmap",
+    "category": "AI Features",
+    "title": "What is the AI Swap Roadmap generator?",
+    "content": "When two users want to exchange different skills (e.g., Python for Graphic Design), the AI Swap Roadmap generator creates a structured 4-week bilateral curriculum detailing what each partner teaches each week, session goals, and milestone achievements.",
+    "keywords": ["ai roadmap", "curriculum", "learning plan", "4-week schedule", "swap plan"]
+  },
+  {
+    "id": "dispute-resolution",
+    "category": "Community & Safety",
+    "title": "What should I do if a provider doesn't show up or doesn't teach properly?",
+    "content": "Never mark a transaction as 'Completed' until you are satisfied with the learning session. If the provider does not show up or declines to teach, simply click 'Cancel' on the transaction. Your reserved credits will be returned to your balance immediately without penalty.",
+    "keywords": ["dispute", "didn't show up", "scam", "refund", "unfair", "problem with provider", "safety"]
+  },
+  {
+    "id": "tech-stack",
+    "category": "Platform Overview",
+    "title": "What technical stack powers the SkillSwap platform?",
+    "content": "SkillSwap is built with a modern Full-Stack MERN & AI architecture: Frontend uses React.js (Vite), Tailwind CSS, React Router v7, and Lucide Icons. The Backend is built with Node.js and Express.js, with MongoDB Atlas for data persistence, Socket.IO for real-time messaging, and Google Gemini API with Vector Search for intelligent RAG features.",
+    "keywords": ["tech stack", "technologies", "mern", "react", "node", "express", "mongodb", "socket.io"]
+  }
+]

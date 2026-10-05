@@ -16,6 +16,8 @@ import transactionRouter from './routes/transaction.routes.js';
 import messageRouter from './routes/message.routes.js';
 import { createNotification } from "./controllers/notification.controller.js";
 import notificationRouter from './routes/notification.routes.js';
+import aiRouter from './routes/ai.routes.js';
+import { initializeKnowledgeBase } from './utils/knowledgeBase.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -131,6 +133,7 @@ app.use('/api/v1/skills', skillRouter);
 app.use('/api/v1/chats', chatRouter);
 app.use('/api/v1/transactions', transactionRouter);
 app.use('/api/v1/messages', messageRouter);
+app.use('/api/v1/ai', aiRouter);
 
 app.get('/', (req, res) => {
   res.send('SkillSwap server is running! 🚀');
@@ -138,8 +141,12 @@ app.get('/', (req, res) => {
 
 connectDb()
   .then(() => {
+    // Initialize RAG Knowledge Base before starting server
+    initializeKnowledgeBase();
+
     httpServer.listen(PORT, () => {
       console.log(`🚀 Server with chat is running at http://localhost:${PORT}`);
+      console.log(`🧠 AI RAG endpoints available at http://localhost:${PORT}/api/v1/ai`);
     });
   })
   .catch((err) => {

@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { api } from '../api/client';
-import { Bot, X, Send, Loader2, Sparkles, MessageCircleQuestion } from 'lucide-react';
+import { Bot, X, Send, Loader2, Sparkles, MessageCircleQuestion, Database, Brain } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function AICoachWidget() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       sender: 'ai',
-      text: "👋 Hi! I'm your SkillSwap AI Coach. Ask me anything about finding swap partners, pricing in credits, or structuring learning sessions!",
+      text: "👋 Hi! I'm your SkillSwap AI Assistant, powered by our platform knowledge vector store. Ask me anything about skill credits, transactions, publishing skills, or real-time chat!",
     },
   ]);
   const [input, setInput] = useState('');
@@ -31,7 +33,7 @@ export default function AICoachWidget() {
 
     try {
       const data = await api.post('/ai/tutor', { message: query });
-      setMessages((prev) => [...prev, { sender: 'ai', text: data.reply }]);
+      setMessages((prev) => [...prev, { sender: 'ai', text: data.reply, sources: data.ragSources }]);
     } catch (err) {
       console.error('AI Coach error:', err);
       setMessages((prev) => [
@@ -45,8 +47,8 @@ export default function AICoachWidget() {
 
   const suggestions = [
     "How do skill credits work?",
-    "Tips for my first swap session",
-    "How to list a popular skill?",
+    "How does transaction lifecycle work?",
+    "Can I cancel a transaction?",
   ];
 
   return (
@@ -113,6 +115,13 @@ export default function AICoachWidget() {
                 >
                   {m.text}
                 </div>
+                {/* RAG Sources indicator */}
+                {m.sources && m.sources.length > 0 && (
+                  <div className="flex items-center gap-1 mt-1 text-[9px] text-slate-500">
+                    <Database className="w-2.5 h-2.5" />
+                    {m.sources.length} RAG source{m.sources.length > 1 ? 's' : ''}
+                  </div>
+                )}
               </div>
             ))}
             {loading && (
@@ -139,6 +148,13 @@ export default function AICoachWidget() {
                 {s}
               </button>
             ))}
+            <button
+              onClick={() => { setIsOpen(false); navigate('/ai-assistant'); }}
+              className="text-[10px] whitespace-nowrap px-2.5 py-1 rounded-full bg-brand-600/20 hover:bg-brand-600/30 text-brand-300 border border-brand-500/20 transition-colors flex items-center gap-1"
+            >
+              <Sparkles className="w-3 h-3" />
+              Full Screen Mode
+            </button>
           </div>
 
           {/* Input Form */}

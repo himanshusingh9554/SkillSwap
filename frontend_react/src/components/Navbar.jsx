@@ -12,6 +12,7 @@ import {
   Layers, 
   ArrowRightLeft, 
   Compass,
+  Brain,
   Menu,
   X
 } from 'lucide-react';
@@ -44,6 +45,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Explore', path: '/', icon: Compass },
     { name: 'Transactions', path: '/transactions', icon: ArrowRightLeft },
+    { name: 'AI Assistant', path: '/ai-assistant', icon: Sparkles },
     { name: 'Profile', path: '/profile', icon: UserIcon },
   ];
 
