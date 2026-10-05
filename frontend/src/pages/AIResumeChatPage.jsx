@@ -43,15 +43,6 @@ export default function AIResumeChatPage() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  useEffect(() => {
-    fetchRagStats();
-    fetchModels();
-  }, []);
-
   const fetchRagStats = async () => {
     try {
       const res = await fetch(`${API_BASE}/ai/rag-stats`);
@@ -73,9 +64,18 @@ export default function AIResumeChatPage() {
         setAvailableModels(data.models);
       }
     } catch (err) {
-      // fallback to DEFAULT_MODELS
+      console.error('Failed to fetch models:', err);
     }
   };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  useEffect(() => {
+    fetchRagStats();
+    fetchModels();
+  }, []);
 
   const handleSend = async (textToSend = input) => {
     const query = textToSend.trim();

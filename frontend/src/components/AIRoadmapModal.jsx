@@ -5,20 +5,10 @@ import { Map, X, Loader2, Calendar, Clock, CheckCircle, Sparkles } from 'lucide-
 export default function AIRoadmapModal({ isOpen, onClose, initialSkillA = '', initialSkillB = '' }) {
   const [mySkill, setMySkill] = useState(initialSkillA);
   const [partnerSkill, setPartnerSkill] = useState(initialSkillB);
-  const [weeks, setWeeks] = useState(4);
+  const [weeks] = useState(4);
   const [roadmap, setRoadmap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (initialSkillA) setMySkill(initialSkillA);
-    if (initialSkillB) setPartnerSkill(initialSkillB);
-    if (initialSkillA && initialSkillB) {
-      handleGenerate(initialSkillA, initialSkillB);
-    }
-  }, [initialSkillA, initialSkillB, isOpen]);
-
-  if (!isOpen) return null;
 
   const handleGenerate = async (skillA = mySkill, skillB = partnerSkill) => {
     if (!skillA.trim() || !skillB.trim()) return;
@@ -39,6 +29,16 @@ export default function AIRoadmapModal({ isOpen, onClose, initialSkillA = '', in
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (initialSkillA) setMySkill(initialSkillA);
+    if (initialSkillB) setPartnerSkill(initialSkillB);
+    if (initialSkillA && initialSkillB && isOpen) {
+      handleGenerate(initialSkillA, initialSkillB);
+    }
+  }, [initialSkillA, initialSkillB, isOpen]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
